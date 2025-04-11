@@ -61,20 +61,25 @@ export class UserService {
   async getStreak(userId: string) {
     const sessions = await this.prisma.learningSession.findMany({
       where: { userId },
-      orderBy: { date: 'desc' },
+      orderBy: { date: 'desc' }, // Order by newest date
     });
 
     const streak = calculateStreak(sessions.map((s) => s.date));
+    const lastActiveDate = sessions.length
+      ? sessions[0].date.toISOString().split('T')[0] // Newest date
+      : null;
+
     return {
       currentStreak: streak.count,
-      lastActiveDate: streak.lastActiveDate,
+      lastActiveDate,
     };
   }
 
-  // Get insights for a user
+// Get insights for a user
   async getInsights(userId: string) {
     const sessions = await this.prisma.learningSession.findMany({
       where: { userId },
+      orderBy: { date: 'desc' }, // Order by newest date
     });
 
     // Extract unique dates
@@ -100,10 +105,15 @@ export class UserService {
       (a, b) => b[1] - a[1],
     )[0]?.[0];
 
+    // Get the last active date from the newest session
+    const lastActiveDate = sessions.length
+      ? sessions[0].date.toISOString().split('T')[0] // Newest date
+      : null;
+
     return {
       currentStreak: streakInfo.count,
       longestStreak: streakInfo.longest,
-      lastActiveDate: streakInfo.lastActiveDate,
+      lastActiveDate,
       mostStudiedTopic,
       totalMinutesThisWeek: total,
       averageDailyMinutes: dates.length > 0 ? total / dates.length : 0,
