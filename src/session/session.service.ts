@@ -1,14 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSessionDto } from './dto/create-session.dto';
 
 @Injectable()
 export class SessionService {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async addSession(userId: string, dto: CreateSessionDto) {
     const formattedDate = new Date(dto.date).toISOString().split('T')[0];
+
+    // Check for duplicate session
+    const existingSession = await this.prisma.learningSession.findFirst({
+      where: {
+        userId,
+        date: new Date(formattedDate),
+      },
+    });
+
+    if (existingSession) {
+      throw new BadRequestException('A session already exists for this date.');
+    }
+
+    // Create a new session
     return this.prisma.learningSession.create({
       data: {
         ...dto,
