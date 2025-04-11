@@ -5,12 +5,12 @@ import eslintPluginPrettier from 'eslint-plugin-prettier';
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked, // Required for rules that need type info
+  ...tseslint.configs.recommendedTypeChecked,
   {
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json'], // 👈 THIS LINE is crucial
+        project: ['./tsconfig.json'],
         tsconfigRootDir: new URL('.', import.meta.url).pathname,
       },
     },
