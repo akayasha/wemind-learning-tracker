@@ -114,4 +114,57 @@ ESLint was disabled because it significantly slowed down task completion due to 
 npm run test
 ```
 
+## 🧪 Testing API with cURL & Postman
+
+### 📌 Create a New User
+
+```bash
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com"
+  }'
+```
+### 📝 Record a Learning Session
+
+``` bash
+curl -X POST http://localhost:3000/sessions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "uuid-of-user",
+    "topic": "Math",
+    "duration": 60,
+    "date": "2025-04-10"
+  }'
+
+```
+
+### 📜 List All Sessions
+
+```bash
+curl http://localhost:3000/sessions
+```
+
+### 📊 Get Total Duration per Topic
+
+```bash
+curl http://localhost:3000/sessions
+```
+
+### 📅 Get Current Streak
+
+```bash
+curl --location 'http://localhost:3000/users/8f275bb3-f922-4fb7-a8c4-c9e6e3c5e3db/streak'
+```
+
+### 📅 Get Insights
+
+```bash
+curl --location 'http://localhost:3000/users/8f275bb3-f922-4fb7-a8c4-c9e6e3c5e3db/insights'
+```
+
+
+
+
 
